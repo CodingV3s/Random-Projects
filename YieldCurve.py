@@ -51,7 +51,7 @@ def yieldcurve_data(address):
 
     # changing string index to date time
     data.index = pd.to_datetime(data.index)
-    return data
+    return data, new_column
 
 def yieldcurve_plot(website):
     website_data, new_column = yieldcurve_data(website)
