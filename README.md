@@ -13,7 +13,7 @@ pip install -r requirements.txt
 
 ## Running Tests
 ```
-python -m unittest
+python -m unittest YieldCurveTests.py
 ```
 
 ## Running Yield Curve
