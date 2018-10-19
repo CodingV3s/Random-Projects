@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 print (' Hi I am Charles, I can plot yield curves from 1990-current year \n')
 print (' Would you like a plot from 1990-current year or would you like plot for a particular year showing 12 month \n')
 
-year_or_month = input( "Enter 'Y' if you want it for all the year or Enter 'M' if you want it for a particular year : ")
+year_or_month = input( "Enter 'Y' if you want it for all the years or Enter 'M' if you want it for a particular year : ")
 
 if year_or_month =='Y' or year_or_month =='y':
     website = "http://data.treasury.gov/feed.svc/DailyTreasuryYieldCurveRateData"
@@ -51,7 +51,7 @@ def yieldcurve_data(address):
 
     # changing string index to date time
     data.index = pd.to_datetime(data.index)
-    return data
+    return data, new_column
 
 def yieldcurve_plot(website):
     website_data, new_column = yieldcurve_data(website)
@@ -71,5 +71,47 @@ def yieldcurve_plot(website):
     ax.set_xticklabels(new_column, rotation='vertical')
     plt.show()
 
-yieldcurve_plot(website)
+    analyze = input('Are you looking to analyze the data for the year (Y/N)')
+    if analyze == 'Y' or analyze =='y':
+        yieldcurve_analysis(website)
+    else:
+        print ('alright good bye')
+    
 
+    
+
+def yieldcurve_analysis(website):
+    website_data, new_column = yieldcurve_data(website)
+    loop_printed = 'No'
+    thisloop_printed = 'No'
+
+    for day in range(0,len(website_data)):
+        # should print the first time the yield curve is partially inverted
+        # A curve partially inverts when 30 year bond rate interest isnt the highest among the available bonds
+        if website_data.iloc[day].idxmax()!='30 year' and website_data.iloc[day].idxmax()!='1 month' and loop_printed =='No':
+            print ('The yield curve partially inverted')
+            print (website_data.iloc[day])
+            website_data.iloc[day].plot()
+            plt.show()
+            loop_printed = 'yes'
+        # should print the first time the yield completely inverts
+        # when 1 month bond rate is the highest among all
+        elif website_data.iloc[day].idxmax()=='1 month' and thisloop_printed == 'No':
+            print (f'The yield curve inverted\n')
+            print (website_datailoc[day].argmax())
+            print (website_data.iloc[day])
+            website_data.iloc[day].plot()
+            plt.show()
+            thisloop_printed = 'yes'
+        # should print when curve hasnt inverted in that particular year
+        elif day == len(website_data) and thisloop_printed != 'No' and loop_printed !='No':
+            print (' The curve has not inverted this year')
+            percent_change = (website_data.iloc[len(website_data)]-website_data.iloc[0])*100/website_data.iloc[0]
+            print (' The percent change in bond rates for the year')
+            print (percent_change)
+            website_data.iloc[len(website_data)].plot()
+            plt.show()
+            
+            
+yieldcurve_plot(website)
+yieldcurve_analysis(website)
