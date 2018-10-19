@@ -34,6 +34,7 @@ if os.path.isfile('DayCount.pkl') and os.path.isfile('RewardFile.pkl'):
         PreAction = input('What action preceded the urge?\n')
         data = [Location,Time,EmotionalState,OtherPeople,PreAction,0,0,0,0]
         df.loc[Day] = data
+        
 
         ExpReward = RewardList[Day-1]
 
@@ -109,7 +110,7 @@ else:
     RewardOut.close()
 
     Day = 1 # Start with Day one
-    df = pd.DataFrame(columns=['Location','Time','Emotional State','OtherPeople','PreAction','Word 1','Word 2','Word 3','Still Feel The Urge'],index=['Day'])
+    df = pd.DataFrame(columns=['Location','Time','Emotional State','OtherPeople','PreAction','Word 1','Word 2','Word 3','Still Feel The Urge'])
     print(f'Experimend Day:{Day}\n')
     Location = input('Enter the location where you felt the craving \n')
     Time = input('Enter the time for the craving \n')
@@ -118,6 +119,7 @@ else:
     PreAction = input('What action preceded the urge?\n')
     data = [Location,Time,EmotionalState,OtherPeople,PreAction,0,0,0,0]
     df.loc[Day]=data
+    df.index.name = 'Day'
     ExpReward = RewardList[Day-1]
 
     print (f'Today instead if {CurrentReward} you will try {ExpReward}')
@@ -154,5 +156,8 @@ else:
     HabitOut = open('Habittochange.pkl', 'wb')
     pickle.dump(CurrentReward, HabitOut)
     HabitOut.close()
+
+    
+
 
     
